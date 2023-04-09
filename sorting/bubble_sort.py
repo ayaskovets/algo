@@ -1,6 +1,7 @@
 from algo.ops import Op
+from algo.ctx import Context
 
-def bubble_sort(input, ctx):
+def bubble_sort(input, ctx: Context):
     n = len(input)
 
     for i in range(n):
