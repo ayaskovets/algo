@@ -5,9 +5,9 @@ def bubble_sort(input, ctx: Context):
     n = len(input)
 
     for i in range(n):
-        for j in range(n):
+        for j in range(i + 1, n):
             if ctx: ctx.ops[Op.SWAP] += 1
-            if input[j] > input[i]:
+            if input[j] < input[i]:
                 if ctx: ctx.ops[Op.COMPARISON] += 1
                 input[i], input[j] = input[j], input[i]
 
