@@ -2,14 +2,15 @@ import copy
 
 from algo.log import print_info, print_ok, print_fail
 
-def test(algorithm, inputs, predicate) -> None:
-    print_info(f'TEST ({algorithm.__name__}) [{len(inputs)}]')
+def test(algorithms, inputs, predicate) -> None:
+    for algorithm in algorithms:
+        print_info(f'TEST ({algorithm.__name__}) [{len(inputs)}]')
 
-    for i, input in enumerate(inputs):
-        output = algorithm(copy.deepcopy(input), ctx=None)
+        for i, input in enumerate(inputs):
+            output = algorithm(copy.deepcopy(input), ctx=None)
 
-        if not predicate(input, output):
-            print_fail(f'FAIL [{i}]: {input} -> {output}')
-            assert False
+            if not predicate(input, output):
+                print_fail(f'FAIL [{i}]: {input} -> {output}')
+                assert False
 
-    print_ok(f'OK ({algorithm.__name__}) [{len(inputs)}]')
+        print_ok(f'OK ({algorithm.__name__}) [{len(inputs)}]')
