@@ -9,7 +9,7 @@ def test(algorithm, inputs, predicate) -> None:
         output = algorithm(copy.deepcopy(input), ctx=None)
 
         if not predicate(input, output):
-            print_fail(f'FAIL [{i}]: {output}')
+            print_fail(f'FAIL [{i}]: {input} -> {output}')
             assert False
 
     print_ok(f'OK ({algorithm.__name__}) [{len(inputs)}]')
