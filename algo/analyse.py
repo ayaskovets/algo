@@ -19,7 +19,7 @@ def analyse(algorithms, inputs, ops) -> None:
             algorithm(copy.deepcopy(input), ctx=ctx)
             ctxs.append(ctx)
 
-        for i, op in ops:
+        for i, op in enumerate(ops):
             y = [ctx.ops[op] for ctx in ctxs]
 
             plt.plot(
