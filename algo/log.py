@@ -5,13 +5,19 @@ class Colors:
     END = '\033[0m'
 
 
-def print_info(text: str) -> None:
-    print(f'{Colors.INFO}{text}{Colors.END}')
+def print_info(*args, **kwargs) -> None:
+    print(Colors.INFO, sep='', end='')
+    print(*args, **kwargs)
+    print(Colors.END, sep='', end='')
 
 
-def print_ok(text: str) -> None:
-    print(f'{Colors.OK}{text}{Colors.END}')
+def print_ok(*args, **kwargs) -> None:
+    print(Colors.OK, sep='', end='')
+    print(*args, **kwargs)
+    print(Colors.END, sep='', end='')
 
 
-def print_fail(text: str) -> None:
-    print(f'{Colors.FAIL}{text}{Colors.END}')
+def print_fail(*args, **kwargs) -> None:
+    print(Colors.FAIL, sep='', end='')
+    print(*args, **kwargs)
+    print(Colors.END, sep='', end='')

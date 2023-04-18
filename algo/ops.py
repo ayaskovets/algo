@@ -2,5 +2,7 @@ import enum
 
 
 class Op(enum.Enum):
-    SWAPS = 'swaps'
     COMPARISONS = 'comparisons'
+    MEMORY = 'memory'
+    RUNTIME = 'runtime'
+    SWAPS = 'swaps'
