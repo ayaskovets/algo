@@ -8,31 +8,32 @@ from sorting.bubble_sort import bubble_sort
 from sorting.selection_sort import selection_sort
 from sorting.merge_sort import merge_sort
 
-# list of array sizes with shuffled items [0..size)
-sizes = list(range(200)) + list(range(200))
+if __name__ == '__main__':
+    # list of array sizes with shuffled items [0..size)
+    sizes = list(range(0, 1001, 50))
 
-# list of algorithms to test and analyse
-algorithms = [
-    bubble_sort,
-    selection_sort,
-    merge_sort
-]
+    # list of algorithms to test and analyse
+    algorithms = [
+        bubble_sort,
+        selection_sort,
+        merge_sort
+    ]
 
-# list of inputs
-inputs = [
-    random.sample(range(-size, size), size)
-    for size in sizes
-]
+    # list of inputs
+    inputs = [
+        random.sample(range(-size, size), size)
+        for size in sizes
+    ]
 
-# predicate for sorting functions
-predicate = lambda _, output: output == sorted(output)
+    # predicate for sorting functions
+    predicate = lambda _, output: output == sorted(output)
 
-# list of operations to analyse
-ops = [
-    # Op.SWAPS,
-    # Op.COMPARISONS,
-    Op.RUNTIME,
-]
+    # list of operations to analyse
+    ops = [
+        # Op.SWAPS,
+        # Op.COMPARISONS,
+        Op.RUNTIME_MS,
+    ]
 
-test(algorithms, inputs, predicate)
-analyse(algorithms, inputs, ops)
+    # test(algorithms, inputs, predicate)
+    analyse(algorithms, inputs, ops)

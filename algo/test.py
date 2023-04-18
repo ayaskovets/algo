@@ -17,8 +17,7 @@ def test(algorithms, inputs, predicate) -> None:
                 print_fail(f'FAIL [{i}]: {input} -> {output}')
                 assert False
 
-            if i % (len(inputs) // 10) == 0:
-                print_info('.',
-                           sep='', end='', flush=True)
+            if (i + 1) % (len(inputs) // min(len(inputs), 10)) == 0:
+                print_info('.', sep='', end='', flush=True)
 
         print_ok(f'\nOK ({algorithm.__name__}) [{len(inputs)}]')
