@@ -55,6 +55,7 @@ def analyse(algorithms, inputs, ops) -> None:
             # TODO: get avg
             y = [ctx[0].get(op) for ctx in ctxs]
 
+            # TODO: different subplot for each op
             plt.plot(
                 x, y, label=f'{algorithm.__name__} {op.name}', alpha=ALPHA, ls=LS[i % len(LS)])
 
