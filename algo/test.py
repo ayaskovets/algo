@@ -1,23 +1,21 @@
 import copy
 
 from algo.ctx import Context
-from algo.log import print_info, print_ok, print_fail
+from algo.log import print_info, print_ok, print_error, progress
 
 
-def test(algorithms, inputs, predicate) -> None:
+def test(algorithms: list, inputs: list, predicate) -> None:
     for algorithm in algorithms:
-        print_info(f'TEST ({algorithm.__name__}) [{len(inputs)}]: ',
-                   end='', flush=True)
+        print_info(
+            f'TEST ({algorithm.__name__}) [{len(inputs)}]: ', end='', flush=True)
 
-        for i, input in enumerate(inputs):
+        for input in progress(inputs):
             ctx = Context()
             output = algorithm(copy.deepcopy(input), ctx=ctx)
 
-            if not predicate(input, output):
-                print_fail(f'FAIL [{i}]: {input} -> {output}')
+            if not predicate(output):
+                print_error(
+                    f'\nERROR ({algorithm.__name__}): {input} -> {output}')
                 assert False
-
-            if (i + 1) % (len(inputs) // min(len(inputs), 10)) == 0:
-                print_info('.', sep='', end='', flush=True)
 
         print_ok(f'\nOK ({algorithm.__name__}) [{len(inputs)}]')
