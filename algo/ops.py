@@ -9,3 +9,8 @@ class Op(enum.Enum):
     # automatically accounted
     MEMORY_KB = 'memory (kb)'
     RUNTIME_MS = 'runtime (ms)'
+
+
+class Agg(enum.Enum):
+    AVERAGE = 'average'
+    SUM = 'sum'
