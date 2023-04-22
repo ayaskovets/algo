@@ -2,16 +2,13 @@ import random
 
 from algo.analyse import analyse
 from algo.test import test
-from algo.ops import Op
+from algo.ops import Agg, Op
 
 from sorting.bubble_sort import bubble_sort
 from sorting.selection_sort import selection_sort
 from sorting.merge_sort import merge_sort
 
 if __name__ == '__main__':
-    # list of array sizes with shuffled items [0..size)
-    sizes = list(range(0, 1001, 50))
-
     # list of algorithms to test and analyse
     algorithms = [
         bubble_sort,
@@ -22,18 +19,20 @@ if __name__ == '__main__':
     # list of inputs
     inputs = [
         random.sample(range(-size, size), size)
-        for size in sizes
+        for size in list(range(0, 100)) * 3
     ]
 
     # predicate for sorting functions
-    predicate = lambda _, output: output == sorted(output)
+    predicate = lambda output: output == sorted(output)
+
+    # weight function for list
+    weight = len
 
     # list of operations to analyse
     ops = [
-        # Op.SWAPS,
-        # Op.COMPARISONS,
-        Op.RUNTIME_MS,
+        (Agg.AVERAGE, Op.COMPARISONS),
+        (Agg.AVERAGE, Op.RUNTIME_MS),
     ]
 
     # test(algorithms, inputs, predicate)
-    analyse(algorithms, inputs, ops)
+    analyse(algorithms, inputs, weight, ops)
