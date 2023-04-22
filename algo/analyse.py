@@ -4,16 +4,16 @@ import time
 import matplotlib.pyplot as plt
 import memory_profiler
 
-from algo.ctx import Context
-from algo.log import print_info, print_ok
-from algo.ops import Op
+from algo.ctx import Context, ContextAgg
+from algo.log import print_info, print_ok, progress
+from algo.ops import Agg, Op
 
 
 ALPHA = 0.5
 LS = ['-', '--', '-.', ':']
 
 
-def __run_algorithm(algorithm, input) -> Context:
+def _run_algorithm(algorithm, input) -> Context:
     ctx = Context()
 
     input = copy.deepcopy(input)
@@ -30,37 +30,33 @@ def __run_algorithm(algorithm, input) -> Context:
     return ctx
 
 
-def analyse(algorithms, inputs, ops) -> None:
-    unique_inpit_sizes = sorted(set(len(input) for input in inputs))
-    size_to_idx = {size: idx for idx, size in enumerate(unique_inpit_sizes)}
+def _show_analysis(algorithms: list, ctx_agg: ContextAgg, ops: list[tuple[Agg, Op]]) -> None:
+    for agg, op in ops:
+        for algorithm in algorithms:
+            x, y = ctx_agg.get(algorithm, agg, op)
 
-    x = list(unique_inpit_sizes)
+            plt.plot(
+                x, y, label=f'{algorithm.__name__} {agg.name} {op.name}', alpha=ALPHA)
+
+    # TODO: different subplot for each op
+    # TODO: get ~complexity
+
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+
+def analyse(algorithms: list, inputs: list, weight, ops: list[tuple[Agg, Op]]) -> None:
+    ctx_agg = ContextAgg()
 
     for algorithm in algorithms:
         print_info(f'ANALYSE ({algorithm.__name__}) [{len(inputs)}]: ',
                    end='', flush=True)
 
-        ctxs = []
-        for _ in x:
-            ctxs.append([])
-
-        for i, input in enumerate(inputs):
-            ctx = __run_algorithm(algorithm, input)
-            ctxs[size_to_idx[len(input)]].append(ctx)
-
-            if (i + 1) % (len(inputs) // min(len(inputs), 10)) == 0:
-                print_info('.', sep='', end='', flush=True)
-
-        for i, op in enumerate(ops):
-            # TODO: get avg
-            y = [ctx[0].get(op) for ctx in ctxs]
-
-            # TODO: different subplot for each op
-            plt.plot(
-                x, y, label=f'{algorithm.__name__} {op.name}', alpha=ALPHA, ls=LS[i % len(LS)])
+        for input in progress(inputs):
+            ctx = _run_algorithm(algorithm, input)
+            ctx_agg.account(algorithm, weight(input), ctx)
 
         print_ok(f'\nDONE ({algorithm.__name__}) [{len(inputs)}]')
 
-    plt.grid(True)
-    plt.legend()
-    plt.show()
+    _show_analysis(algorithms, ctx_agg, ops)
