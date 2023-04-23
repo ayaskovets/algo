@@ -1,62 +1,47 @@
-import copy
-import time
+"""
+    Module containing the analyse function to analyse and display
+    computational complexity of algorithms
+"""
 
-import matplotlib.pyplot as plt
-import memory_profiler
+import collections
 
-from algo.ctx import Context, ContextAgg
-from algo.log import print_info, print_ok, progress
-from algo.ops import Agg, Op
-
-
-ALPHA = 0.5
-LS = ['-', '--', '-.', ':']
+from algo.internal.log import print_info, print_ok, progress
+from algo.internal.run import run_algorithm
+from algo.internal.show import show_analysis
 
 
-def _run_algorithm(algorithm, input) -> Context:
-    ctx = Context()
+def analyse(algorithms: list, inputs: list, weights: list[tuple],
+            operations: list[tuple]) -> None:
+    """
+        Arguments:
+          - algorithms: list of functions each taking one input value of
+                arbitrary type and return an output of arbitrary type
 
-    input = copy.deepcopy(input)
-    start = time.time_ns()
-    # TODO: count memory usage
-    # memory = memory_profiler.memory_usage(
-    #     (algorithm, [input, ctx], {}), max_usage=True)
-    algorithm(input, ctx)
-    end = time.time_ns()
+          - inputs: list of inputs to run the algorithms on
 
-    # ctx.account(Op.MEMORY_KB, memory)
-    ctx.account(Op.RUNTIME_MS, (end - start) / 1e6)
+          - weights: list of tuples(function, alias), where function is a
+                callable taking a single input from inputs and returning
+                the weight of this input, (for example in the context of
+                sorting function weight of the sorted list is its length) and
+                alias is a name for this function to display on the analysis
+                graph
 
-    return ctx
+          - operations: list of tuples()
 
+        Returns:
+          - None
+    """
 
-def _show_analysis(algorithms: list, ctx_agg: ContextAgg, ops: list[tuple[Agg, Op]]) -> None:
-    for agg, op in ops:
-        for algorithm in algorithms:
-            x, y = ctx_agg.get(algorithm, agg, op)
-
-            plt.plot(
-                x, y, label=f'{algorithm.__name__} {agg.name} {op.name}', alpha=ALPHA)
-
-    # TODO: different subplot for each op
-    # TODO: get ~complexity
-
-    plt.grid(True)
-    plt.legend()
-    plt.show()
-
-
-def analyse(algorithms: list, inputs: list, weight, ops: list[tuple[Agg, Op]]) -> None:
-    ctx_agg = ContextAgg()
+    ctxs_by_algorithm = collections.defaultdict(list)
 
     for algorithm in algorithms:
-        print_info(f'ANALYSE ({algorithm.__name__}) [{len(inputs)}]: ',
+        print_info(f'RUN ({algorithm.__name__}) [{len(inputs)}]: ',
                    end='', flush=True)
 
-        for input in progress(inputs):
-            ctx = _run_algorithm(algorithm, input)
-            ctx_agg.account(algorithm, weight(input), ctx)
+        for inp in progress(inputs):
+            ctx = run_algorithm(algorithm, inp, weights)
+            ctxs_by_algorithm[algorithm].append(ctx)
 
         print_ok(f'\nDONE ({algorithm.__name__}) [{len(inputs)}]')
 
-    _show_analysis(algorithms, ctx_agg, ops)
+    show_analysis(ctxs_by_algorithm, weights, operations)

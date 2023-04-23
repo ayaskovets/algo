@@ -1,15 +1,19 @@
-from algo.ctx import Context
-from algo.ops import Op
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-function-docstring
+# pylint: disable=invalid-name
+
+from algo.context import Context
+from algo.operations import Metric
 
 
-def bubble_sort(input, ctx: Context):
-    n = len(input)
+def bubble_sort(items, ctx: Context):
+    n = len(items)
 
     for i in range(n):
         for j in range(i + 1, n):
-            ctx.account(Op.COMPARISONS)
-            if input[j] < input[i]:
-                ctx.account(Op.SWAPS)
-                input[i], input[j] = input[j], input[i]
+            ctx.account(Metric.COMPARISONS)
+            if items[j] < items[i]:
+                ctx.account(Metric.SWAPS)
+                items[i], items[j] = items[j], items[i]
 
-    return input
+    return items
