@@ -1,38 +1,49 @@
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-function-docstring
+
 import random
 
 from algo.analyse import analyse
+from algo.operations import Aggregation, Metric
 from algo.test import test
-from algo.ops import Agg, Op
 
 from sorting.bubble_sort import bubble_sort
-from sorting.selection_sort import selection_sort
 from sorting.merge_sort import merge_sort
+from sorting.selection_sort import selection_sort
+
 
 if __name__ == '__main__':
     # list of algorithms to test and analyse
     algorithms = [
         bubble_sort,
+        merge_sort,
         selection_sort,
-        merge_sort
     ]
 
-    # list of inputs
+    # list of inputs to run the algorithms on
     inputs = [
         random.sample(range(-size, size), size)
-        for size in list(range(0, 100)) * 3
+        for size in (list(range(5)) + list(range(5)))
     ]
 
-    # predicate for sorting functions
-    predicate = lambda output: output == sorted(output)
+    # output predicate to test sorting functions
+    is_sorted = lambda out: out == sorted(out)
 
-    # weight function for list
-    weight = len
-
-    # list of operations to analyse
-    ops = [
-        (Agg.AVERAGE, Op.COMPARISONS),
-        (Agg.AVERAGE, Op.RUNTIME_MS),
+    # big O x axis (weight calculation for input)
+    weights = [
+        (len, 'n'),
+        (sum, 'sum'),
     ]
 
-    # test(algorithms, inputs, predicate)
-    analyse(algorithms, inputs, weight, ops)
+    # big O y axis (operations to analyse)
+    operations = [
+        (Aggregation.AVERAGE, Metric.COMPARISONS),
+        (Aggregation.AVERAGE, Metric.SWAPS),
+    ]
+
+    # run tests and check that the output satisfies the passed predicate
+    test(algorithms, inputs, is_sorted)
+
+    # run analysis and show complexity in the context of passed weights and
+    # operations
+    analyse(algorithms, inputs, weights, operations)

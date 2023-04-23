@@ -3,7 +3,7 @@
 """
 
 from algo.operations import Metric
-from algo.types import Alias, Map, Maybe, Weight
+from algo.types import Alias, Amount, Map, Maybe
 
 
 class Context:
@@ -13,38 +13,38 @@ class Context:
     """
 
     def __init__(self) -> None:
-        self._operations: Map[Metric, Weight] = {}
-        self._weights: Map[Alias, Weight] = {}
+        self._operations: Map[Metric, Amount] = {}
+        self._weights: Map[Alias, Amount] = {}
 
-    def _set_weight(self, alias: Alias, amount: Weight) -> None:
+    def _set_weight(self, alias: Alias, amount: Amount) -> None:
         self._weights[alias] = amount
 
-    def _get_weights(self) -> Map[Alias, Weight]:
+    def _get_weights(self) -> Map[Alias, Amount]:
         return self._weights
 
-    def account(self, operation: Metric, amount: Weight = 1.0) -> None:
+    def account(self, metric: Metric, amount: Amount = 1.0) -> None:
         """
             Arguments:
-              - operation: an operation to account
+              - metric: an metric to account
 
-              - amount: amount of the operation to account
+              - amount: amount of the metric to account
 
             Returns:
               - None
         """
 
-        self._operations[operation] =\
-            self._operations.get(operation, 0.0) + amount
+        self._operations[metric] =\
+            self._operations.get(metric, 0.0) + amount
 
-    def get(self, operation: Metric,
-            default: Maybe[Weight] = None) -> Maybe[Weight]:
+    def get(self, metric: Metric,
+            default: Maybe[Amount] = None) -> Maybe[Amount]:
         """
             Arguments:
-              - operation: an operation to get the amount of
+              - metric: an metric to get the amount of
 
               - default: the same as default in dict.get
 
             Returns:
-              - the amount of the operation
+              - the amount of the metric
         """
-        return self._operations.get(operation, default)
+        return self._operations.get(metric, default)

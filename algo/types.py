@@ -17,6 +17,7 @@ Operation = tuple[Aggregation, Metric]
 
 Predicate = typing.Callable[[Input], bool]
 
-Weight = float
+Amount = float
 Alias = str
-Weights = tuple[Alias, typing.Callable[[Input], Weight]]
+Weights = tuple[Alias, typing.Callable[[Input], Amount]]
+Plot = tuple[list[Amount], list[Amount]]
