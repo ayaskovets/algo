@@ -3,7 +3,7 @@
 """
 
 from algo.operations import Metric
-from algo.types import Alias, Amount, Map, Maybe
+from algo.types import Amount, Map, Maybe
 
 
 class Context:
@@ -14,13 +14,6 @@ class Context:
 
     def __init__(self) -> None:
         self._operations: Map[Metric, Amount] = {}
-        self._weights: Map[Alias, Amount] = {}
-
-    def _set_weight(self, alias: Alias, amount: Amount) -> None:
-        self._weights[alias] = amount
-
-    def _get_weights(self) -> Map[Alias, Amount]:
-        return self._weights
 
     def account(self, metric: Metric, amount: Amount = 1.0) -> None:
         """
