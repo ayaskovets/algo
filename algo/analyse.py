@@ -8,7 +8,7 @@ import collections
 from algo.internal.aggregation import aggregate
 from algo.internal.log import print_info, print_ok, progress
 from algo.internal.run import run_algorithm
-# from algo.internal.show import show_analysis
+from algo.internal.show import show_analysis
 from algo.internal.weights import calculate_weights
 
 from algo.context import Context
@@ -56,4 +56,4 @@ def analyse(algorithms: list[Algorithm], inputs: list[Input],
 
     plots = aggregate(weights_by_alias, ctxs_by_algorithm, operations)
 
-    # show_analysis(plots)
+    show_analysis(plots)
