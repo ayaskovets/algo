@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # list of inputs to run the algorithms on
     inputs = [
         random.sample(range(-size, size), size)
-        for size in (list(range(5)) + list(range(5)))
+        for size in (list(range(0, 3001, 300)))
     ]
 
     # output predicate to test sorting functions
@@ -31,14 +31,14 @@ if __name__ == '__main__':
 
     # big O x axis (weight calculation for input)
     weights = [
-        (len, 'n'),
-        (sum, 'sum'),
+        ('n', len),
+        ('sum', sum),
     ]
 
     # big O y axis (operations to analyse)
     operations = [
         (Aggregation.AVERAGE, Metric.COMPARISONS),
-        (Aggregation.AVERAGE, Metric.SWAPS),
+        (Aggregation.AVERAGE, Metric.RUNTIME_MS),
     ]
 
     # run tests and check that the output satisfies the passed predicate

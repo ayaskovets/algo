@@ -9,10 +9,10 @@ def test(algorithms, inputs, predicate) -> None:
     ...
 ```
 
-To show a graph showing how the value of each op in **ops** depends on **len** of each input in **inputs** for each algorithm in **algorithms**:
+To show a graph showing how the value of each op in **operations** depends on each of the **weights** of each input in **inputs** for each algorithm in **algorithms**:
 
 ```python
-def analyse(algorithms, inputs, ops) -> None:
+def analyse(algorithms, inputs, weights, operations) -> None:
     ...
 ```
 
