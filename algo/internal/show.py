@@ -3,30 +3,11 @@
 
 import matplotlib.pyplot as plt
 
-from algo.internal.complexity import Complexity, calculate_complexity
-
 from algo.types import Algorithm, Alias, Map, Operation, Plot
 
 
 LS = ['-', '--', '-.', ':']
 LW = list(range(1, 4))
-
-
-# pylint: disable=inconsistent-return-statements
-def _serialize_complexity(complexity: Complexity, alias: Alias):
-    if complexity == Complexity.N:
-        return f'{alias}'
-
-    if complexity == Complexity.N_2:
-        return f'{alias}²'
-
-    if complexity == Complexity.LOG_N:
-        return f'log₂({alias})'
-
-    if complexity == Complexity.N_LOG_N:
-        return f'{alias}log₂({alias})'
-
-    assert not 'implemented yet!'
 
 
 # pylint: disable=too-many-locals
@@ -56,11 +37,9 @@ def show_analysis(plots: Map[Operation, Map[Alias, Map[Algorithm, Plot]]]) ->\
                 algorithms = list(plots_by_algorithm.keys())
 
             for k, (_, plot) in enumerate(plots_by_algorithm.items()):
-                complexity = calculate_complexity(plot)
-
                 ax.plot(plot[0], plot[1], alpha=0.5, linewidth=LW[k % len(LW)],
                         linestyle=LS[k % len(LS)],
-                        label=_serialize_complexity(complexity, alias))
+                        label=alias)
 
     handles, _ = ax.get_legend_handles_labels()
     fig.legend(handles, [algorithm.__name__ for algorithm in algorithms],
